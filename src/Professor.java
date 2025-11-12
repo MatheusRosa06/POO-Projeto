@@ -4,10 +4,6 @@ public class Professor extends Pessoa {
     }
     @Override
     public void exibirInformacoes() {
-        // Implementação do método abstrato
-        System.out.println("--- Informações do Professor ---");
-        System.out.println("Nome: " + this.nome);
-        System.out.println("CPF: " + this.cpf);
-        System.out.println("Email: " + this.email);
+
     }
 }
