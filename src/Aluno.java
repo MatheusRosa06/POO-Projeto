@@ -6,7 +6,6 @@ public class Aluno extends Pessoa {
     }
     public int getNumeroMatricula() {
         return numeroMatricula;
-        
     }
 
     @Override
