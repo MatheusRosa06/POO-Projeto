@@ -12,7 +12,6 @@ public class Professor extends Pessoa {
         this.areadeAtuacao = areadeAtuacao;
     }
 
-
     public String getAreadeAtuacao() {
         return areadeAtuacao;
     }
