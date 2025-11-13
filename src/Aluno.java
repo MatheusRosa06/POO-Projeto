@@ -9,6 +9,7 @@ public class Aluno extends Pessoa {
         System.out.println("Nome: " + nome);
         System.out.println("CPF: " + cpf);
         System.out.println("Email: " + email);
+
     }
 
 }
