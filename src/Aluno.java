@@ -1,8 +1,12 @@
 public class Aluno extends Pessoa {
-    public Aluno(String nome, String cpf, String email)  {
-        super(nome, cpf, email);
-    }
     private int numeroMatricula;
+    public Aluno(String nome, String cpf, String email, int numeroMatricula)  {
+        super(nome, cpf, email);
+        this.numeroMatricula = numeroMatricula;
+    }
+    public int getNumeroMatricula() {
+        return numeroMatricula;
+    }
 
     @Override
     public void exibirInformacoes() {
