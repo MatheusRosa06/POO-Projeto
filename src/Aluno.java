@@ -1,6 +1,6 @@
 public class Aluno extends Pessoa {
     private int numeroMatricula;
-    public Aluno(String nome, String cpf, String email, int numeroMatricula)  {
+    public Aluno(String nome, String cpf, String email)  {
         super(nome, cpf, email);
         this.numeroMatricula = numeroMatricula;
     }
