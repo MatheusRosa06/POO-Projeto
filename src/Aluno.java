@@ -13,6 +13,7 @@ public class Aluno extends Pessoa {
 
     private List<Matricula> listaDeMatriculas = new ArrayList<>();
 
+
     @Override
     public void exibirInformacoes() {
         System.out.println("Nome: " + nome);
@@ -20,9 +21,11 @@ public class Aluno extends Pessoa {
         System.out.println("Email: " + email);
     }
 
+
     public void adicionarMatricula(Matricula M) {
         this.listaDeMatriculas.add(M);
     }
+
 
     public void listarMatriculas() {
         if (listaDeMatriculas.isEmpty()) {
@@ -30,10 +33,21 @@ public class Aluno extends Pessoa {
             return;
         }
 
-        System.out.println("Matrículas do aluno:");
+        System.out.println("--- Matrículas do Aluno: ---");
+
         for (Matricula m : listaDeMatriculas) {
-            System.out.println("- Descrição: " + m.getDescricao() + " | Código: " + m.getCodigo());
+            String nomeDisciplina = m.getDisciplina().getNomeDisciplina();
+            System.out.println("\n[Código: " + m.getCodigo() + "]");
+            System.out.println("  Disciplina: " + nomeDisciplina);
+            System.out.println("  Presenças: " + m.getPresencas() + " / " + m.getTotalAulas() + " aulas");
+
+            // TESTA O STATUS DA FREQUÊNCIA (USANDO A EXCEPTION)
+            try {
+                m.validarPresencaMinima();
+                System.out.println("  Status: Aprovado pela Frequência (>= 75%)");
+            } catch (MatriculaInvalidaException e) {
+                System.out.println("  Status: **REPROVADO POR FALTA**");
+            }
         }
     }
-
 }
