@@ -27,7 +27,7 @@ public class Interface {
     }
 
 
-    //   TELA 1 — CADASTRO DE ALUNO
+    //   TELA 1 — Cadatro de aluno
 
     private void criarTelaCadastro() {
 

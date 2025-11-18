@@ -15,7 +15,7 @@ public class Main {
         Professor p2 = new Professor("Akitodr", "222.222.222-22", "akitodr@puc.com", "BSI");
         Professor p3 = new Professor("Mariana", "333.333.333-33", "mariana@puc.com", "BSI");
 
-        // Adicionando prof a lista
+        // Adicionando professores a lista
         professores.add(p1);
         professores.add(p2);
         professores.add(p3);
