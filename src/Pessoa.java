@@ -23,4 +23,9 @@ public abstract class Pessoa {
 
 
     public abstract void exibirInformacoes();
+
+    //metodo para ser sobrescrito
+    public void saudacao() {
+        System.out.println("Olá! Eu sou uma pessoa cadastrada no sistema.");
+    }
 }

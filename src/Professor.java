@@ -43,4 +43,8 @@
 
 
         }
+        //metodo sobrescrito
+        public void saudacao() {
+            System.out.println("Olá! Eu sou o professor " + this.nome);
+        }
     }
