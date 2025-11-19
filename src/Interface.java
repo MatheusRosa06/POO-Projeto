@@ -100,6 +100,9 @@ public class Interface {
 
                 Aluno aluno = new Aluno(nome, cpf, email, codMat);
                 alunos.add(aluno);
+
+                GerenciadorCSVAluno.gravarAlunos(alunos); // <-- SALVA APÓS CADASTRAR
+
                 atualizarComboAlunos();
 
                 // --- PEGA SOMENTE AS DISCIPLINAS QUE FORAM MARCADAS ---

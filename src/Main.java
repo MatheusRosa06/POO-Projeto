@@ -5,7 +5,9 @@ public class Main {
     public static void main(String[] args) {
 
         //criando listas
-        ArrayList<Aluno> alunos = new ArrayList<>(GerenciadorCSVAluno.lerAlunos()); // <-- lê do CSV
+        ArrayList<Aluno> alunos = new ArrayList<>();
+        alunos.addAll(GerenciadorCSVAluno.lerAlunos());
+
         ArrayList<Professor> professores = new ArrayList<>();
         ArrayList<Disciplina> disciplinas = new ArrayList<>();
         ArrayList<Matricula> matriculas = new ArrayList<>();
@@ -28,10 +30,6 @@ public class Main {
 
         // Inicia interface passando todas as listas
         new Interface(alunos, disciplinas, matriculas);
-
-        // salva alterações no CSV
-        GerenciadorCSVAluno.gravarAlunos(alunos);
-
 
 
         // IMPRIME INFORMAÇÕES NO TERMINAL (NOVO)
