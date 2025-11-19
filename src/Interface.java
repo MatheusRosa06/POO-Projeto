@@ -12,7 +12,14 @@ public class Interface {
     private ArrayList<Disciplina> disciplinas;
     private ArrayList<Matricula> matriculas;
 
-    private JComboBox<Integer> alunoBox; // atributo compartilhado entre telas
+    private JComboBox<Integer> alunoBox;
+
+    private void atualizarComboAlunos() {
+        alunoBox.removeAllItems();
+        for (Aluno a : alunos) {
+            alunoBox.addItem(a.getNumeroMatricula());
+        }
+    }
 
     public Interface(ArrayList<Aluno> alunos,
                      ArrayList<Disciplina> disciplinas,
@@ -26,12 +33,12 @@ public class Interface {
         criarTelaGerenciamento();
     }
 
-
-    //   TELA 1 — Cadatro de aluno
+    // ------------------------------------------------------------------
+    // TELA 1 — Cadastro de aluno (AGORA COM CHECKBOXES)
+    // ------------------------------------------------------------------
 
     private void criarTelaCadastro() {
 
-        //layout da tela
         frameCadastro = new JFrame("Cadastro de Aluno");
         frameCadastro.setSize(450, 500);
         frameCadastro.setLayout(new GridLayout(10, 1));
@@ -43,7 +50,6 @@ public class Interface {
         JTextField emailField = new JTextField();
         JTextField matriculaField = new JTextField();
 
-        //campos a preencher
         frameCadastro.add(new JLabel("Nome:"));
         frameCadastro.add(nomeField);
 
@@ -56,17 +62,23 @@ public class Interface {
         frameCadastro.add(new JLabel("Número da Matrícula (único):"));
         frameCadastro.add(matriculaField);
 
-        // lista múltipla de disciplinas
-        DefaultListModel<String> modeloDisc = new DefaultListModel<>();
+        // PAINEL COM CHECKBOX PARA CADA DISCIPLINA
+        JPanel painelChecks = new JPanel();
+        painelChecks.setLayout(new GridLayout( disciplinas.size(), 1 ));
+
+        ArrayList<JCheckBox> checkBoxes = new ArrayList<>();
+
         for (Disciplina d : disciplinas) {
-            modeloDisc.addElement(d.getNomeDisciplina());
+            JCheckBox check = new JCheckBox(d.getNomeDisciplina());
+            painelChecks.add(check);
+            checkBoxes.add(check);
         }
 
-        JList<String> listaDisciplinas = new JList<>(modeloDisc);
-        listaDisciplinas.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        JScrollPane scroll = new JScrollPane(painelChecks);
+        scroll.setPreferredSize(new Dimension(200, 120));
 
         frameCadastro.add(new JLabel("Selecione Disciplinas:"));
-        frameCadastro.add(new JScrollPane(listaDisciplinas));
+        frameCadastro.add(scroll);
 
         JButton btnCadastrar = new JButton("Cadastrar Aluno");
 
@@ -78,28 +90,36 @@ public class Interface {
                 String email = emailField.getText();
                 int codMat = Integer.parseInt(matriculaField.getText());
 
-                Aluno aluno = new Aluno(nome, cpf, email, codMat);
-                alunos.add(aluno);
-
-                // Atualiza combo box do gerenciamento
-                alunoBox.addItem(aluno.getNumeroMatricula());
-
-                for (int i : listaDisciplinas.getSelectedIndices()) {
-                    Disciplina disc = disciplinas.get(i);
-
-                    int totalAulas = disc.getCargaHoraria();
-
-                    int presencas = Integer.parseInt(
-                            JOptionPane.showInputDialog("Presenças iniciais em " + disc.getNomeDisciplina())
-                    );
-
-                    Matricula m = new Matricula(codMat, aluno, disc, totalAulas, presencas);
-                    matriculas.add(m);
-
-                    System.out.println(">> Matricula criada para " + disc.getNomeDisciplina());
+                for (Aluno a : alunos) {
+                    if (a.getNumeroMatricula() == codMat) {
+                        JOptionPane.showMessageDialog(null,
+                                "Erro: já existe um aluno com essa matrícula!");
+                        return;
+                    }
                 }
 
-                System.out.println("Aluno cadastrado: " + nome);
+                Aluno aluno = new Aluno(nome, cpf, email, codMat);
+                alunos.add(aluno);
+                atualizarComboAlunos();
+
+                // --- PEGA SOMENTE AS DISCIPLINAS QUE FORAM MARCADAS ---
+                for (int i = 0; i < checkBoxes.size(); i++) {
+                    JCheckBox box = checkBoxes.get(i);
+
+                    if (box.isSelected()) {
+                        Disciplina disc = disciplinas.get(i);
+
+                        int totalAulas = disc.getCargaHoraria();
+
+                        int presencas = Integer.parseInt(
+                                JOptionPane.showInputDialog("Presenças iniciais em " + disc.getNomeDisciplina())
+                        );
+
+                        Matricula m = new Matricula(codMat, aluno, disc, totalAulas, presencas);
+                        matriculas.add(m);
+                        aluno.adicionarMatricula(m); // mantém seu fluxo original
+                    }
+                }
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -107,30 +127,28 @@ public class Interface {
         });
 
         frameCadastro.add(btnCadastrar);
-
         frameCadastro.setVisible(true);
     }
 
-
-    //   TELA 2 — Gerenciamento de presenças
+    // ------------------------------------------------------------------
+    // TELA 2 — Gerenciamento de presença (NADA ALTERADO)
+    // ------------------------------------------------------------------
 
     private void criarTelaGerenciamento() {
 
-        //layout da tela
         frameGerenciamento = new JFrame("Gerenciamento de Presenças");
         frameGerenciamento.setSize(450, 500);
         frameGerenciamento.setLayout(new GridLayout(10, 1));
         frameGerenciamento.setLocation(600, 100);
         frameGerenciamento.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // <<< usar atributo da classe,
         alunoBox = new JComboBox<>();
         JComboBox<String> discBox = new JComboBox<>();
 
-        //botoes para gerenciar dados
         JButton carregarBtn = new JButton("Carregar Disciplinas");
         JButton registrarBtn = new JButton("Registrar Presença");
         JButton validarBtn = new JButton("Validar Frequência");
+        JButton btnListarAlunos = new JButton("Listar Todos os Alunos");
 
         frameGerenciamento.add(new JLabel("Selecione Aluno (Matrícula):"));
         frameGerenciamento.add(alunoBox);
@@ -141,25 +159,29 @@ public class Interface {
         frameGerenciamento.add(carregarBtn);
         frameGerenciamento.add(registrarBtn);
         frameGerenciamento.add(validarBtn);
+        frameGerenciamento.add(btnListarAlunos);
 
-        // carregar alunos já existentes pela matricula
-        for (Aluno a : alunos) {
-            alunoBox.addItem(a.getNumeroMatricula());
-        }
+        atualizarComboAlunos();
 
-        //botao "carregar diciplinas
         carregarBtn.addActionListener((ActionEvent e) -> {
             discBox.removeAllItems();
             int mat = (int) alunoBox.getSelectedItem();
 
+            ArrayList<String> adicionadas = new ArrayList<>();
+
             for (Matricula m : matriculas) {
                 if (m.getAluno().getNumeroMatricula() == mat) {
-                    discBox.addItem(m.getDisciplina().getNomeDisciplina());
+
+                    String nomeDisc = m.getDisciplina().getNomeDisciplina();
+
+                    if (!adicionadas.contains(nomeDisc)) {
+                        discBox.addItem(nomeDisc);
+                        adicionadas.add(nomeDisc);
+                    }
                 }
             }
         });
 
-        //botao "registra presença"
         registrarBtn.addActionListener((ActionEvent e) -> {
             int mat = (int) alunoBox.getSelectedItem();
             String disc = (String) discBox.getSelectedItem();
@@ -168,13 +190,12 @@ public class Interface {
                 if (m.getAluno().getNumeroMatricula() == mat &&
                         m.getDisciplina().getNomeDisciplina().equals(disc)) {
 
-                    m.registrarPresenca(); // prints da classe Matricula
+                    m.registrarPresenca();
                     break;
                 }
             }
         });
 
-        //botao "validar frequência"
         validarBtn.addActionListener((ActionEvent e) -> {
             int mat = (int) alunoBox.getSelectedItem();
             String disc = (String) discBox.getSelectedItem();
@@ -190,6 +211,20 @@ public class Interface {
                     }
                 }
             }
+        });
+
+        btnListarAlunos.addActionListener(e -> {
+
+            StringBuilder sb = new StringBuilder("Alunos cadastrados:\n\n");
+
+            for (Aluno a : alunos) {
+                sb.append("Nome: ").append(a.getNome()).append("\n");
+                sb.append("Email: ").append(a.getEmail()).append("\n");
+                sb.append("Matrícula: ").append(a.getNumeroMatricula()).append("\n");
+                sb.append("-----------------------------\n");
+            }
+
+            JOptionPane.showMessageDialog(null, sb.toString());
         });
 
         frameGerenciamento.setVisible(true);
