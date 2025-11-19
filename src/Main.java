@@ -31,15 +31,18 @@ public class Main {
         // Inicia interface passando todas as listas
         new Interface(alunos, disciplinas, matriculas);
 
+        // Chamada polimórfica
+        ArrayList<Pessoa> pessoas = new ArrayList<>();
+        pessoas.addAll(alunos);
+        pessoas.addAll(professores);
+
+        for (Pessoa pessoa : pessoas) {
+            pessoa.exibirInformacoes();  // polimorfismo
+            System.out.println("-----------------------------");
+        }
+
 
         // IMPRIME INFORMAÇÕES NO TERMINAL (NOVO)
-
-
-        System.out.println("\n=== PROFESSORES CADASTRADOS ===");
-        for (Professor p : professores) {
-            p.exibirInformacoes();
-            System.out.println("-");
-        }
 
         System.out.println("\nDISCIPLINAS CADASTRADAS");
         for (Disciplina d : disciplinas) {
