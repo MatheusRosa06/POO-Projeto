@@ -40,12 +40,7 @@
             System.out.println("Email: " + email);
             System.out.println("Área de atuação: " + areadeAtuacao);
             System.out.println("Disciplinas Ministradas:");
-            if (disciplinasMinistradas.isEmpty()) {
-                System.out.println("  Nenhuma disciplina cadastrada.");
-            } else {
-                for (Disciplina d : disciplinasMinistradas) {
-                    System.out.println("  - " + d.getNomeDisciplina());
-                }
-            }
+
+
         }
     }

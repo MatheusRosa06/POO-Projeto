@@ -27,6 +27,22 @@ public class Main {
         disciplinas.add(new Disciplina("Experiência Criativa", 120, p2));
 
         // Inicia interface passando todas as listas
-        new Interface(alunos,disciplinas, matriculas);
+        new Interface(alunos, disciplinas, matriculas);
+
+
+        // IMPRIME INFORMAÇÕES NO TERMINAL (NOVO)
+
+
+        System.out.println("\n=== PROFESSORES CADASTRADOS ===");
+        for (Professor p : professores) {
+            p.exibirInformacoes();
+            System.out.println("-");
+        }
+
+        System.out.println("\nDISCIPLINAS CADASTRADAS");
+        for (Disciplina d : disciplinas) {
+            d.exibirInformacoesDisciplina();
+            System.out.println("-");
+        }
     }
 }
